@@ -1,0 +1,971 @@
+/* ================================
+   OPERATION: SCHOOL RESTORE
+   AGENT BRIEFING SCREEN
+================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    color: white;
+
+    background:
+        radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.22), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.15), transparent 30%),
+        linear-gradient(135deg, #020617, #071329, #0f172a);
+
+    position: relative;
+}
+
+
+/* =================================
+   DIGITAL GRID BACKGROUND
+================================= */
+
+body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(rgba(56, 189, 248, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.045) 1px, transparent 1px);
+
+    background-size: 45px 45px;
+
+    animation: gridMove 12s linear infinite;
+
+    pointer-events: none;
+}
+
+@keyframes gridMove {
+
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 45px 45px;
+    }
+}
+
+
+/* =================================
+   GLOWING BACKGROUND ORBS
+================================= */
+
+body::after {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    border-radius: 50%;
+
+    background: rgba(37, 99, 235, 0.08);
+
+    filter: blur(80px);
+
+    animation: backgroundGlow 8s ease-in-out infinite;
+
+    pointer-events: none;
+}
+
+@keyframes backgroundGlow {
+
+    0%, 100% {
+        transform: translate(-120px, -80px);
+    }
+
+    50% {
+        transform: translate(120px, 80px);
+    }
+}
+
+
+/* =================================
+   FLOATING PARTICLES
+================================= */
+
+.particles::before,
+.particles::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #38bdf8;
+
+    box-shadow:
+        80px 40px #38bdf8,
+        180px 150px #60a5fa,
+        300px 80px #38bdf8,
+        420px 220px #60a5fa,
+        520px 120px #38bdf8,
+        650px 300px #60a5fa,
+        120px 400px #38bdf8,
+        350px 500px #60a5fa;
+
+    opacity: 0.45;
+
+    animation: particlesMove 8s ease-in-out infinite;
+
+    pointer-events: none;
+}
+
+.particles::after {
+
+    width: 4px;
+    height: 4px;
+
+    opacity: 0.3;
+
+    animation-delay: 3s;
+
+    box-shadow:
+        50px 200px #38bdf8,
+        250px 100px #60a5fa,
+        450px 350px #38bdf8,
+        600px 150px #60a5fa,
+        750px 400px #38bdf8;
+}
+
+@keyframes particlesMove {
+
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-30px);
+    }
+}
+
+
+/* =================================
+   MAIN AGENT CARD
+================================= */
+
+.card {
+
+    width: 390px;
+
+    padding: 32px;
+
+    position: relative;
+
+    text-align: center;
+
+    background: rgba(2, 6, 23, 0.78);
+
+    border: 1px solid rgba(56, 189, 248, 0.5);
+
+    border-radius: 22px;
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 0 30px rgba(14, 165, 233, 0.12),
+        inset 0 0 30px rgba(56, 189, 248, 0.025);
+
+    animation: cardEnter 1.2s ease-out;
+
+    z-index: 5;
+
+    overflow: hidden;
+}
+
+
+/* =================================
+   CARD BORDER ANIMATION
+================================= */
+
+.card::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: 22px;
+
+    border: 1px solid transparent;
+
+    background:
+        linear-gradient(120deg,
+        rgba(56, 189, 248, 0.7),
+        transparent,
+        rgba(37, 99, 235, 0.6),
+        transparent)
+        border-box;
+
+    mask:
+        linear-gradient(#000 0 0) padding-box,
+        linear-gradient(#000 0 0);
+
+    mask-composite: exclude;
+
+    animation: borderRotate 5s linear infinite;
+
+    pointer-events: none;
+}
+
+@keyframes borderRotate {
+
+    0% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.4;
+    }
+}
+
+
+/* =================================
+   CARD ENTRANCE
+================================= */
+
+@keyframes cardEnter {
+
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.9);
+        filter: blur(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+
+/* =================================
+   CLASSIFIED BADGE
+================================= */
+
+.classified {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 7px 14px;
+
+    margin-bottom: 20px;
+
+    border-radius: 20px;
+
+    border: 1px solid rgba(56, 189, 248, 0.35);
+
+    background: rgba(15, 23, 42, 0.8);
+
+    color: #7dd3fc;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    animation: badgeGlow 2s ease-in-out infinite;
+}
+
+@keyframes badgeGlow {
+
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(56, 189, 248, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 0 18px rgba(56, 189, 248, 0.25);
+    }
+}
+
+
+/* =================================
+   STATUS DOT
+================================= */
+
+.status-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow: 0 0 12px #22c55e;
+
+    animation: statusPulse 1.5s infinite;
+}
+
+@keyframes statusPulse {
+
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(0.6);
+        opacity: 0.4;
+    }
+}
+
+
+/* =================================
+   TARGET / AGENT HUD
+================================= */
+
+.target {
+
+    position: absolute;
+
+    right: 20px;
+    top: 20px;
+
+    font-size: 38px;
+
+    color: #38bdf8;
+
+    opacity: 0.35;
+
+    animation:
+        targetRotate 8s linear infinite,
+        targetPulse 2s ease-in-out infinite;
+}
+
+@keyframes targetRotate {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes targetPulse {
+
+    0%, 100% {
+        opacity: 0.25;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+
+/* =================================
+   TOP LABEL
+================================= */
+
+.tag {
+
+    color: #7dd3fc;
+
+    font-size: 11px;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 8px;
+}
+
+
+/* =================================
+   MAIN TITLE
+================================= */
+
+h1 {
+
+    font-size: 32px;
+
+    letter-spacing: 5px;
+
+    color: white;
+
+    text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.3);
+
+    animation: titleAppear 1.5s ease;
+}
+
+h2 {
+
+    font-size: 23px;
+
+    letter-spacing: 4px;
+
+    margin-top: 5px;
+    margin-bottom: 20px;
+
+    color: #60a5fa;
+
+    text-shadow:
+        0 0 8px #2563eb,
+        0 0 20px rgba(37, 99, 235, 0.5);
+
+    animation: titleGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes titleAppear {
+
+    from {
+        opacity: 0;
+        letter-spacing: 15px;
+    }
+
+    to {
+        opacity: 1;
+        letter-spacing: 5px;
+    }
+}
+
+@keyframes titleGlow {
+
+    0%, 100% {
+        text-shadow:
+            0 0 8px #2563eb;
+    }
+
+    50% {
+        text-shadow:
+            0 0 15px #2563eb,
+            0 0 30px #1d4ed8;
+    }
+}
+
+
+/* =================================
+   SYSTEM BREACH
+================================= */
+
+.system-status {
+
+    padding: 9px;
+
+    margin-bottom: 18px;
+
+    border-left: 2px solid #ef4444;
+
+    background: rgba(239, 68, 68, 0.08);
+
+    color: #fca5a5;
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    animation: warningPulse 2s infinite;
+}
+
+.system-status span {
+
+    color: #ef4444;
+
+    text-shadow: 0 0 10px #ef4444;
+}
+
+@keyframes warningPulse {
+
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.55;
+    }
+}
+
+
+/* =================================
+   STORY
+================================= */
+
+.story {
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    margin-bottom: 18px;
+}
+
+
+/* =================================
+   MISSION INFORMATION
+================================= */
+
+.mission-info {
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+}
+
+.mission-info span {
+
+    padding: 7px 9px;
+
+    border-radius: 7px;
+
+    border: 1px solid rgba(148, 163, 184, 0.2);
+
+    background: rgba(15, 23, 42, 0.6);
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+    transition: 0.3s;
+}
+
+.mission-info span:hover {
+
+    color: #7dd3fc;
+
+    border-color: #38bdf8;
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+
+/* =================================
+   AGENT NAME INPUT
+================================= */
+
+input {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border-radius: 10px;
+
+    border: 1px solid #334155;
+
+    outline: none;
+
+    background: rgba(2, 6, 23, 0.9);
+
+    color: white;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+
+    transition: 0.3s;
+}
+
+input::placeholder {
+
+    color: #64748b;
+}
+
+input:focus {
+
+    border-color: #38bdf8;
+
+    box-shadow:
+        0 0 10px rgba(56, 189, 248, 0.2),
+        inset 0 0 10px rgba(56, 189, 248, 0.04);
+
+    transform: scale(1.02);
+}
+
+
+/* =================================
+   START MISSION BUTTON
+================================= */
+
+button {
+
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        90deg,
+        #1d4ed8,
+        #2563eb,
+        #1d4ed8
+    );
+
+    background-size: 200% 100%;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 0 15px rgba(37, 99, 235, 0.25);
+
+    transition: 0.3s;
+
+    animation: buttonGlow 3s ease-in-out infinite;
+}
+
+button:hover {
+
+    transform: translateY(-3px) scale(1.02);
+
+    box-shadow:
+        0 0 25px rgba(37, 99, 235, 0.7);
+}
+
+button:active {
+
+    transform: scale(0.96);
+}
+
+@keyframes buttonGlow {
+
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+
+/* =================================
+   SECURE CONNECTION
+================================= */
+
+.secure {
+
+    margin-top: 16px;
+
+    color: #64748b;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    animation: secureBlink 3s infinite;
+}
+
+@keyframes secureBlink {
+
+    0%, 100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 500px) {
+
+    .card {
+
+        width: 90%;
+
+        padding: 25px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    h2 {
+        font-size: 19px;
+    }
+}
+/* =================================
+   FUTURISTIC AGENT BACKGROUND
+================================= */
+
+/* LARGE HUD CIRCLES */
+
+.hud-circle {
+    position: absolute;
+    border: 1px solid rgba(56, 189, 248, 0.12);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.circle-one {
+    width: 650px;
+    height: 650px;
+    animation: hudRotate 25s linear infinite;
+}
+
+.circle-two {
+    width: 450px;
+    height: 450px;
+    border-style: dashed;
+    opacity: 0.5;
+    animation: hudRotateReverse 18s linear infinite;
+}
+
+.circle-one::before,
+.circle-one::after {
+    content: "";
+    position: absolute;
+    border: 1px solid rgba(96, 165, 250, 0.12);
+    border-radius: 50%;
+}
+
+.circle-one::before {
+    inset: 35px;
+}
+
+.circle-one::after {
+    inset: 90px;
+}
+
+@keyframes hudRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes hudRotateReverse {
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+
+/* =================================
+   HUD CORNER BRACKETS
+================================= */
+
+.corner {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    opacity: 0.35;
+}
+
+.corner::before,
+.corner::after {
+    content: "";
+    position: absolute;
+    background: #38bdf8;
+}
+
+
+/* TOP LEFT */
+
+.top-left {
+    top: 35px;
+    left: 35px;
+    border-left: 1px solid #38bdf8;
+    border-top: 1px solid #38bdf8;
+}
+
+.top-left::before {
+    width: 25px;
+    height: 1px;
+    left: 0;
+    top: 12px;
+}
+
+.top-left::after {
+    width: 1px;
+    height: 25px;
+    left: 12px;
+    top: 0;
+}
+
+
+/* TOP RIGHT */
+
+.top-right {
+    top: 35px;
+    right: 35px;
+    border-right: 1px solid #38bdf8;
+    border-top: 1px solid #38bdf8;
+}
+
+
+/* BOTTOM LEFT */
+
+.bottom-left {
+    bottom: 35px;
+    left: 35px;
+    border-left: 1px solid #38bdf8;
+    border-bottom: 1px solid #38bdf8;
+}
+
+
+/* BOTTOM RIGHT */
+
+.bottom-right {
+    bottom: 35px;
+    right: 35px;
+    border-right: 1px solid #38bdf8;
+    border-bottom: 1px solid #38bdf8;
+}
+
+
+/* =================================
+   DIGITAL DATA
+================================= */
+
+.data-stream {
+    position: absolute;
+
+    color: #38bdf8;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    opacity: 0.18;
+
+    font-family: monospace;
+
+    pointer-events: none;
+
+    white-space: nowrap;
+
+    animation: dataFloat 8s ease-in-out infinite;
+}
+
+.stream-one {
+    left: 8%;
+    top: 25%;
+}
+
+.stream-two {
+    right: 8%;
+    top: 65%;
+    animation-delay: 2s;
+}
+
+.stream-three {
+    left: 12%;
+    bottom: 18%;
+    animation-delay: 4s;
+}
+
+@keyframes dataFloat {
+
+    0%, 100% {
+        transform: translateX(0);
+        opacity: 0.12;
+    }
+
+    50% {
+        transform: translateX(20px);
+        opacity: 0.3;
+    }
+}
+
+
+/* =================================
+   EXTRA ENERGY GLOW
+================================= */
+
+body {
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(30, 64, 175, 0.10),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 10% 80%,
+            rgba(14, 165, 233, 0.10),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(37, 99, 235, 0.10),
+            transparent 25%
+        ),
+        linear-gradient(
+            135deg,
+            #020617,
+            #071329,
+            #0f172a
+        );
+}
+
+
+/* =================================
+   MAKE BACKGROUND ELEMENTS BEHIND CARD
+================================= */
+
+.hud-circle,
+.corner,
+.data-stream,
+.particles {
+    z-index: 1;
+}
+
+.card {
+    z-index: 10;
+}

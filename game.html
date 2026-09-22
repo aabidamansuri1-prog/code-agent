@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Operation School Restore | Mission</title>
+
+    <link rel="stylesheet" href="game.css">
+</head>
+
+<body>
+
+    <!-- BACKGROUND EFFECTS -->
+
+    <div class="hud-circle circle-one"></div>
+    <div class="hud-circle circle-two"></div>
+
+    <div class="particles"></div>
+
+
+    <!-- GAME HEADER -->
+
+    <header class="game-header">
+
+        <div class="game-title">
+            <span>OPERATION:</span>
+            SCHOOL RESTORE
+        </div>
+
+        <div class="agent-status">
+            CODE AGENT: <strong id="agentName">AGENT</strong>
+        </div>
+
+    </header>
+
+
+    <!-- GAME STATUS -->
+
+    <section class="status-panel">
+
+        <div class="status-box">
+            <span class="status-label">TIME</span>
+            <strong id="timer">15:00</strong>
+        </div>
+
+        <div class="status-box">
+            <span class="status-label">LIVES</span>
+            <strong id="lives">❤️❤️❤️</strong>
+        </div>
+
+        <div class="status-box">
+            <span class="status-label">DIGITAL KEYS</span>
+            <strong id="keys">0 / 5</strong>
+        </div>
+
+        <div class="status-box">
+            <span class="status-label">PROGRESS</span>
+            <strong id="progress">0%</strong>
+        </div>
+
+    </section>
+
+
+    <!-- MISSION PROGRESS -->
+
+    <section class="mission-progress">
+
+        <div class="progress-title">
+            MISSION PROGRESS
+        </div>
+
+        <div class="progress-track">
+
+            <div id="progressBar"></div>
+
+        </div>
+
+        <div class="mission-numbers">
+
+            <span class="active">01</span>
+            <span>02</span>
+            <span>03</span>
+            <span>04</span>
+            <span>05</span>
+
+        </div>
+
+    </section>
+
+
+    <!-- CURRENT MISSION -->
+
+    <main class="mission-area">
+
+        <div class="mission-badge">
+            MISSION 
+        </div>
+
+        <h1 id="missionTitle">
+            1.FIREWALL DECODER
+        </h1>
+
+        <p id="missionDescription">
+            The virus has locked the main firewall.
+            Decode the binary message to unlock the system.
+        </p>
+
+
+        <!-- MISSION CONTENT WILL GO HERE -->
+
+        <div id="missionContent" class="mission-content">
+
+            <div class="loading-message">
+                INITIALIZING MISSION...
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- GAME MESSAGE -->
+
+    <div id="gameMessage" class="game-message"></div>
+
+
+    <!-- GAME SCRIPT -->
+
+    <script src="game.js"></script>
+    <script src="game.js"></script>
+
+</body>
+
+</html>

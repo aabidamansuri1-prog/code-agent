@@ -1,0 +1,4229 @@
+/* =================================
+   OPERATION: SCHOOL RESTORE
+   GAME SCREEN
+================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    color: #e0f2fe;
+
+    background:
+        radial-gradient(circle at 50% 50%, rgba(30, 64, 175, 0.12), transparent 35%),
+        radial-gradient(circle at 10% 80%, rgba(14, 165, 233, 0.10), transparent 25%),
+        radial-gradient(circle at 90% 20%, rgba(37, 99, 235, 0.10), transparent 25%),
+        linear-gradient(135deg, #020617, #071329, #0f172a);
+
+    overflow-x: hidden;
+    position: relative;
+}
+
+
+/* =================================
+   DIGITAL GRID
+================================= */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    background-image:
+        linear-gradient(rgba(56, 189, 248, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.035) 1px, transparent 1px);
+
+    background-size: 45px 45px;
+
+    animation: gridMove 15s linear infinite;
+
+    pointer-events: none;
+}
+
+@keyframes gridMove {
+
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 45px 45px;
+    }
+}
+
+
+/* =================================
+   HUD CIRCLES
+================================= */
+
+.hud-circle {
+    position: fixed;
+
+    border: 1px solid rgba(56, 189, 248, 0.10);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+.circle-one {
+
+    width: 700px;
+    height: 700px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    animation: rotateHUD 25s linear infinite;
+}
+
+.circle-two {
+
+    width: 450px;
+    height: 450px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    border-style: dashed;
+
+    animation: rotateHUDReverse 18s linear infinite;
+}
+
+.circle-one::before,
+.circle-one::after {
+
+    content: "";
+
+    position: absolute;
+
+    border: 1px solid rgba(96, 165, 250, 0.08);
+
+    border-radius: 50%;
+}
+
+.circle-one::before {
+    inset: 45px;
+}
+
+.circle-one::after {
+    inset: 100px;
+}
+
+@keyframes rotateHUD {
+
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes rotateHUDReverse {
+
+    from {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+
+/* =================================
+   PARTICLES
+================================= */
+
+.particles::before,
+.particles::after {
+
+    content: "";
+
+    position: fixed;
+
+    width: 3px;
+    height: 3px;
+
+    background: #38bdf8;
+
+    border-radius: 50%;
+
+    box-shadow:
+        80px 100px #38bdf8,
+        200px 300px #60a5fa,
+        350px 150px #38bdf8,
+        500px 450px #60a5fa,
+        700px 200px #38bdf8,
+        900px 500px #60a5fa,
+        1100px 150px #38bdf8,
+        1200px 400px #60a5fa;
+
+    opacity: 0.35;
+
+    animation: particlesFloat 7s ease-in-out infinite;
+}
+
+@keyframes particlesFloat {
+
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.2;
+    }
+
+    50% {
+        transform: translateY(-20px);
+        opacity: 0.5;
+    }
+}
+
+
+/* =================================
+   GAME HEADER
+================================= */
+
+.game-header {
+
+    position: relative;
+    z-index: 10;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 35px;
+
+    border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+
+    background: rgba(2, 6, 23, 0.75);
+
+    backdrop-filter: blur(10px);
+}
+
+.game-title {
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    color: #e0f2fe;
+}
+
+.game-title span {
+
+    color: #38bdf8;
+
+    margin-right: 8px;
+}
+
+.agent-status {
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    color: #64748b;
+}
+
+.agent-status strong {
+
+    color: #38bdf8;
+}
+
+
+/* =================================
+   STATUS PANEL
+================================= */
+
+.status-panel {
+
+    position: relative;
+    z-index: 10;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 15px;
+
+    width: min(1000px, 92%);
+
+    margin: 25px auto 0;
+}
+
+.status-box {
+
+    padding: 16px;
+
+    text-align: center;
+
+    background: rgba(15, 23, 42, 0.75);
+
+    border: 1px solid rgba(56, 189, 248, 0.15);
+
+    border-radius: 10px;
+
+    transition: 0.3s;
+}
+
+.status-box:hover {
+
+    border-color: rgba(56, 189, 248, 0.4);
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.08);
+}
+
+.status-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    color: #64748b;
+}
+
+.status-box strong {
+
+    font-size: 20px;
+
+    color: #7dd3fc;
+
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+}
+
+
+/* =================================
+   MISSION PROGRESS
+================================= */
+
+.mission-progress {
+
+    position: relative;
+    z-index: 10;
+
+    width: min(1000px, 92%);
+
+    margin: 25px auto 0;
+}
+
+.progress-title {
+
+    margin-bottom: 10px;
+
+    font-size: 11px;
+
+    letter-spacing: 3px;
+
+    color: #38bdf8;
+}
+
+.progress-track {
+
+    width: 100%;
+
+    height: 7px;
+
+    overflow: hidden;
+
+    background: #0f172a;
+
+    border: 1px solid rgba(56, 189, 248, 0.15);
+
+    border-radius: 10px;
+}
+
+#progressBar {
+
+    width: 0%;
+
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        #0284c7,
+        #38bdf8,
+        #60a5fa
+    );
+
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+
+    border-radius: 10px;
+
+    transition: width 0.6s ease;
+}
+
+.mission-numbers {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 10px;
+}
+
+.mission-numbers span {
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    color: #475569;
+
+    transition: 0.3s;
+}
+
+.mission-numbers .active {
+
+    color: #38bdf8;
+
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+
+/* =================================
+   MAIN MISSION AREA
+================================= */
+
+.mission-area {
+
+    position: relative;
+    z-index: 10;
+
+    width: min(850px, 92%);
+
+    margin: 35px auto 50px;
+
+    padding: 45px;
+
+    text-align: center;
+
+    background: rgba(2, 6, 23, 0.78);
+
+    border: 1px solid rgba(56, 189, 248, 0.2);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 0 50px rgba(14, 165, 233, 0.08),
+        inset 0 0 30px rgba(56, 189, 248, 0.02);
+
+    backdrop-filter: blur(12px);
+
+    animation: missionEnter 0.7s ease-out;
+}
+
+@keyframes missionEnter {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =================================
+   MISSION BADGE
+================================= */
+
+.mission-badge {
+
+    display: inline-block;
+
+    padding: 7px 15px;
+
+    border: 1px solid rgba(56, 189, 248, 0.3);
+
+    border-radius: 5px;
+
+    background: rgba(14, 165, 233, 0.06);
+
+    font-size: 11px;
+
+    letter-spacing: 3px;
+
+    color: #38bdf8;
+
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.05);
+}
+
+
+/* =================================
+   MISSION TITLE
+================================= */
+
+.mission-area h1 {
+
+    margin-top: 18px;
+
+    font-size: clamp(28px, 5vw, 42px);
+
+    letter-spacing: 4px;
+
+    color: #f0f9ff;
+
+    text-shadow:
+        0 0 10px rgba(56, 189, 248, 0.4),
+        0 0 25px rgba(56, 189, 248, 0.12);
+}
+
+.mission-area > p {
+
+    max-width: 650px;
+
+    margin: 15px auto 0;
+
+    line-height: 1.7;
+
+    font-size: 14px;
+
+    color: #94a3b8;
+}
+
+
+/* =================================
+   MISSION CONTENT
+================================= */
+
+.mission-content {
+
+    margin-top: 35px;
+
+    padding: 30px;
+
+    min-height: 180px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px dashed rgba(56, 189, 248, 0.18);
+
+    border-radius: 12px;
+
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.loading-message {
+
+    font-family: monospace;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    color: #38bdf8;
+
+    animation: loadingPulse 1.5s infinite;
+}
+
+@keyframes loadingPulse {
+
+    0%, 100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =================================
+   GAME MESSAGE
+================================= */
+
+.game-message {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 25px;
+
+    transform: translateX(-50%);
+
+    z-index: 100;
+
+    padding: 12px 25px;
+
+    border-radius: 8px;
+
+    background: rgba(2, 6, 23, 0.95);
+
+    border: 1px solid rgba(56, 189, 248, 0.3);
+
+    color: #7dd3fc;
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: 0.3s;
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 700px) {
+
+    .game-header {
+
+        padding: 16px 18px;
+
+        flex-direction: column;
+
+        gap: 10px;
+
+        text-align: center;
+    }
+
+    .status-panel {
+
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mission-area {
+
+        padding: 30px 20px;
+    }
+
+    .circle-one {
+
+        width: 450px;
+        height: 450px;
+    }
+
+    .circle-two {
+
+        width: 300px;
+        height: 300px;
+    }
+}
+
+@media (max-width: 450px) {
+
+    .status-panel {
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+    }
+
+    .status-box {
+
+        padding: 12px 5px;
+    }
+
+    .status-box strong {
+
+        font-size: 16px;
+    }
+
+    .mission-area h1 {
+
+        letter-spacing: 2px;
+    }
+}
+/* =================================
+   EMERGENCY FIREWALL INTERFACE
+================================= */
+
+.mission-area {
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* Emergency red atmosphere */
+
+.mission-area::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(239, 68, 68, 0.08),
+            transparent 45%
+        );
+
+    animation: emergencyPulse 2.5s ease-in-out infinite;
+
+    z-index: 0;
+}
+
+
+/* Keep mission content above atmosphere */
+
+.mission-area > * {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =================================
+   FIREWALL WARNING
+================================= */
+
+.firewall-warning {
+
+    display: inline-block;
+
+    margin-bottom: 20px;
+
+    padding: 7px 15px;
+
+    border: 1px solid rgba(248, 113, 113, 0.5);
+
+    background: rgba(127, 29, 29, 0.18);
+
+    color: #f87171;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    animation: warningPulse 1.4s infinite;
+
+}
+
+
+/* =================================
+   FIREWALL CORE
+================================= */
+
+.firewall-core {
+
+    position: relative;
+
+    width: 260px;
+
+    height: 260px;
+
+    margin: 10px auto 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+/* Circular rings */
+
+.core-ring {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(56, 189, 248, 0.35);
+
+}
+
+
+/* Outer ring */
+
+.ring-one {
+
+    width: 250px;
+
+    height: 250px;
+
+    border-style: dashed;
+
+    animation:
+        rotateCore 12s linear infinite;
+
+}
+
+
+/* Middle ring */
+
+.ring-two {
+
+    width: 205px;
+
+    height: 205px;
+
+    border-color: rgba(248, 113, 113, 0.45);
+
+    border-top-color: transparent;
+
+    border-bottom-color: transparent;
+
+    animation:
+        rotateCoreReverse 7s linear infinite;
+
+}
+
+
+/* Inner ring */
+
+.ring-three {
+
+    width: 155px;
+
+    height: 155px;
+
+    border-color: rgba(56, 189, 248, 0.6);
+
+    box-shadow:
+        0 0 20px rgba(56, 189, 248, 0.12);
+
+    animation:
+        rotateCore 5s linear infinite;
+
+}
+
+
+/* =================================
+   CORE CENTER
+================================= */
+
+.core-center {
+
+    width: 115px;
+
+    height: 115px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(239, 68, 68, 0.22),
+            rgba(2, 6, 23, 0.95) 70%
+        );
+
+    border: 1px solid rgba(248, 113, 113, 0.6);
+
+    box-shadow:
+        0 0 25px rgba(239, 68, 68, 0.25),
+        inset 0 0 25px rgba(239, 68, 68, 0.12);
+
+    animation: corePulse 1.2s ease-in-out infinite;
+
+}
+
+
+/* Lock */
+
+.lock-icon {
+
+    font-size: 22px;
+
+    margin-bottom: 8px;
+
+    animation: lockBlink 1s infinite;
+
+}
+
+
+/* =================================
+   BINARY SIGNAL
+================================= */
+
+.firewall-core .binary-code {
+
+    font-family: monospace;
+
+    font-size: 20px;
+
+    letter-spacing: 3px;
+
+    color: #38bdf8;
+
+    text-shadow:
+        0 0 8px #38bdf8,
+        0 0 20px rgba(56, 189, 248, 0.6);
+
+    /*
+       Continuous unstable signal
+    */
+
+    animation:
+        binaryBlink 0.9s steps(2) infinite;
+
+}
+
+
+/* =================================
+   VIRUS SIGNAL
+================================= */
+
+.code-status {
+
+    font-family: monospace;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    color: #f87171;
+
+}
+
+
+.blink-dot {
+
+    display: inline-block;
+
+    margin-right: 5px;
+
+    animation: warningBlink 0.7s infinite;
+
+}
+
+
+/* =================================
+   ANIMATIONS
+================================= */
+
+@keyframes binaryBlink {
+
+    0% {
+        opacity: 1;
+        filter: brightness(1.2);
+    }
+
+    50% {
+        opacity: 0.25;
+        filter: brightness(0.5);
+    }
+
+    100% {
+        opacity: 1;
+        filter: brightness(1.5);
+    }
+
+}
+
+
+@keyframes corePulse {
+
+    0%, 100% {
+        transform: scale(0.98);
+
+        box-shadow:
+            0 0 20px rgba(239, 68, 68, 0.2),
+            inset 0 0 20px rgba(239, 68, 68, 0.1);
+    }
+
+    50% {
+        transform: scale(1.04);
+
+        box-shadow:
+            0 0 45px rgba(239, 68, 68, 0.4),
+            inset 0 0 30px rgba(239, 68, 68, 0.2);
+    }
+
+}
+
+
+@keyframes rotateCore {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+@keyframes rotateCoreReverse {
+
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+
+}
+
+
+@keyframes warningBlink {
+
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.15;
+    }
+
+}
+
+
+@keyframes lockBlink {
+
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+
+}
+
+
+@keyframes warningPulse {
+
+    0%, 100% {
+        box-shadow:
+            0 0 5px rgba(248, 113, 113, 0.05);
+    }
+
+    50% {
+        box-shadow:
+            0 0 20px rgba(248, 113, 113, 0.25);
+    }
+
+}
+
+
+@keyframes emergencyPulse {
+
+    0%, 100% {
+        opacity: 0.35;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+}
+/* =================================
+   FIX MISSION TEXT ORIENTATION
+================================= */
+
+.mission-area {
+    width: 100%;
+}
+
+.mission-content {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.mission-content p,
+.mission-content strong,
+.mission-content div {
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+}
+
+/* Make instruction text wider */
+
+.ai-terminal {
+    width: 100%;
+}
+
+#terminalText {
+    width: 100%;
+    text-align: left;
+    white-space: normal;
+}
+
+.terminal-line {
+    display: block;
+    width: 100%;
+    white-space: normal;
+}
+
+/* Firewall section */
+
+.firewall-panel {
+    width: 100%;
+}
+
+/* Question section */
+
+.challenge-panel {
+    width: 100%;
+}
+
+.challenge-panel .question {
+    width: 100%;
+    max-width: 700px;
+    margin: 15px auto 20px;
+    line-height: 1.6;
+}
+
+/* Prevent letters from stacking vertically */
+
+.mission-alert {
+    width: 100%;
+}
+
+.mission-alert p {
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+}
+/* =========================================
+   MISSION 01 — AGENT CONSOLE
+========================================= */
+
+.mission-console {
+    width: 100%;
+    max-width: 1050px;
+    margin: 25px auto 0;
+}
+
+
+/* =========================================
+   TOP ALERT
+========================================= */
+
+.mission-alert-bar {
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 16px;
+
+    background: rgba(127, 29, 29, 0.16);
+
+    border: 1px solid rgba(248, 113, 113, 0.35);
+
+    color: #f87171;
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+}
+
+.alert-light {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #ef4444;
+
+    box-shadow:
+        0 0 8px #ef4444;
+
+    animation: emergencyLight 0.8s infinite;
+}
+
+.threat-level {
+    margin-left: auto;
+
+    color: #facc15;
+
+    font-size: 10px;
+}
+
+
+/* =========================================
+   MAIN GRID
+========================================= */
+
+.mission-grid {
+
+    display: grid;
+
+    grid-template-columns: 0.85fr 1.15fr;
+
+    gap: 18px;
+
+    margin-top: 18px;
+}
+
+
+/* =========================================
+   AI PANEL
+========================================= */
+
+.ai-panel {
+
+    min-height: 285px;
+
+    padding: 20px;
+
+    background: rgba(5, 15, 35, 0.75);
+
+    border: 1px solid rgba(56, 189, 248, 0.25);
+
+    position: relative;
+}
+
+.panel-heading {
+
+    color: #38bdf8;
+
+    font-family: monospace;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+}
+
+.panel-heading span {
+    color: #22c55e;
+}
+
+.ai-status {
+
+    display: inline-block;
+
+    margin-top: 14px;
+
+    padding: 4px 8px;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+    color: #22c55e;
+
+    border: 1px solid rgba(34, 197, 94, 0.3);
+
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.ai-lines {
+
+    margin-top: 25px;
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    line-height: 2;
+
+    color: #94a3b8;
+}
+
+.ai-lines p {
+    margin: 0;
+}
+
+.ai-lines p:first-child {
+    color: #f87171;
+}
+
+.ai-message {
+
+    position: absolute;
+
+    bottom: 20px;
+
+    left: 20px;
+
+    right: 20px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid rgba(56, 189, 248, 0.12);
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   FIREWALL CORE
+========================================= */
+
+.firewall-panel-new {
+
+    min-height: 285px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(239, 68, 68, 0.09),
+            rgba(2, 6, 23, 0.85) 55%
+        );
+
+    border: 1px solid rgba(248, 113, 113, 0.22);
+
+    position: relative;
+}
+
+.core-label {
+
+    position: absolute;
+
+    top: 15px;
+
+    left: 18px;
+
+    font-family: monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    color: #64748b;
+}
+
+
+/* CORE */
+
+.core {
+
+    width: 190px;
+
+    height: 190px;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* ROTATING RINGS */
+
+.core-ring {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    border: 1px solid;
+}
+
+.core-ring-1 {
+
+    width: 185px;
+    height: 185px;
+
+    border-color: rgba(56, 189, 248, 0.35);
+
+    border-style: dashed;
+
+    animation: rotateCore 10s linear infinite;
+}
+
+.core-ring-2 {
+
+    width: 145px;
+    height: 145px;
+
+    border-color: rgba(248, 113, 113, 0.45);
+
+    border-top-color: transparent;
+
+    border-bottom-color: transparent;
+
+    animation: rotateCoreReverse 6s linear infinite;
+}
+
+.core-ring-3 {
+
+    width: 110px;
+    height: 110px;
+
+    border-color: rgba(56, 189, 248, 0.6);
+
+    animation: corePulse 1.5s ease-in-out infinite;
+}
+
+
+/* CENTER */
+
+.core-center {
+
+    width: 85px;
+    height: 85px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #030712;
+
+    border: 1px solid rgba(248, 113, 113, 0.7);
+
+    box-shadow:
+        0 0 25px rgba(239, 68, 68, 0.25);
+}
+
+.lock {
+
+    font-size: 18px;
+
+    margin-bottom: 6px;
+
+    animation: lockPulse 1s infinite;
+}
+
+.binary-signal {
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    color: #38bdf8;
+
+    animation: binarySignal 0.8s steps(2) infinite;
+}
+
+
+/* STATUS */
+
+.signal-status {
+
+    margin-top: 8px;
+
+    color: #f87171;
+
+    font-family: monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================================
+   CHALLENGE
+========================================= */
+
+.challenge-console {
+
+    margin-top: 18px;
+
+    padding: 25px;
+
+    text-align: center;
+
+    background: rgba(5, 15, 35, 0.8);
+
+    border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.challenge-label {
+
+    color: #38bdf8;
+
+    font-family: monospace;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 12px;
+}
+
+.challenge-console h3 {
+
+    margin: 0 0 20px;
+
+    font-size: 16px;
+
+    font-weight: 400;
+
+    color: #e2e8f0;
+}
+
+.challenge-console h3 span {
+
+    color: #38bdf8;
+
+    font-family: monospace;
+}
+
+
+/* ANSWER */
+
+.answer-area {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+}
+
+.answer-area input {
+
+    width: 180px;
+
+    padding: 12px;
+
+    text-align: center;
+
+    font-family: monospace;
+
+    font-size: 14px;
+
+    color: white;
+
+    background: #020617;
+
+    border: 1px solid rgba(56, 189, 248, 0.35);
+
+    outline: none;
+}
+
+.answer-area input:focus {
+
+    border-color: #38bdf8;
+
+    box-shadow:
+        0 0 15px rgba(56, 189, 248, 0.2);
+}
+
+.answer-area button {
+
+    padding: 12px 20px;
+
+    border: 1px solid #38bdf8;
+
+    background: rgba(14, 165, 233, 0.12);
+
+    color: #38bdf8;
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.answer-area button:hover {
+
+    background: rgba(14, 165, 233, 0.25);
+
+    box-shadow:
+        0 0 20px rgba(56, 189, 248, 0.25);
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes emergencyLight {
+
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.15;
+    }
+}
+
+@keyframes rotateCore {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotateCoreReverse {
+
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes corePulse {
+
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+@keyframes lockPulse {
+
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+@keyframes binarySignal {
+
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .mission-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .answer-area {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .answer-area input,
+    .answer-area button {
+        width: 100%;
+    }
+
+}
+/* =========================================
+   MISSION 02 — LOGIC CIRCUIT REPAIR
+========================================= */
+
+.circuit-mission {
+    width: 100%;
+    max-width: 1050px;
+    margin: 20px auto 0;
+}
+
+/* HEADER */
+
+.circuit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(5, 15, 35, 0.85);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.circuit-round {
+    color: #38bdf8;
+}
+
+.circuit-status {
+    color: #f87171;
+    animation: circuitWarning 1s infinite;
+}
+
+
+/* SITUATION */
+
+.circuit-situation {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 16px;
+    padding: 18px;
+    background: rgba(5, 15, 35, 0.8);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.situation-icon {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    background: rgba(14, 165, 233, 0.08);
+
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.08);
+}
+
+.situation-label {
+    color: #38bdf8;
+    font-family: monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-bottom: 7px;
+}
+
+.circuit-situation p {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* CIRCUIT BOARD */
+
+.circuit-board {
+    min-height: 180px;
+
+    margin-top: 16px;
+    padding: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+
+    background:
+        linear-gradient(
+            rgba(5, 15, 35, 0.92),
+            rgba(2, 6, 23, 0.96)
+        );
+
+    border: 1px solid rgba(34, 197, 94, 0.18);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* CIRCUIT GRID */
+
+.circuit-board::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(56, 189, 248, 0.05) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(56, 189, 248, 0.05) 1px,
+            transparent 1px
+        );
+
+    background-size: 30px 30px;
+
+    pointer-events: none;
+}
+
+
+/* INPUT NODES */
+
+.input-node,
+.power-node {
+    position: relative;
+    z-index: 2;
+
+    width: 95px;
+    height: 85px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #020617;
+
+    border: 1px solid rgba(56, 189, 248, 0.35);
+
+    box-shadow:
+        0 0 15px rgba(56, 189, 248, 0.06);
+}
+
+.input-node span,
+.power-node span {
+    font-family: monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: #64748b;
+}
+
+.input-node strong {
+    margin-top: 8px;
+
+    font-family: monospace;
+    font-size: 25px;
+
+    color: #22c55e;
+
+    text-shadow:
+        0 0 12px rgba(34, 197, 94, 0.7);
+}
+
+.power-node strong {
+    margin-top: 8px;
+
+    font-size: 22px;
+
+    animation: powerBlink 1s infinite;
+}
+
+
+/* WIRES */
+
+.circuit-wire {
+    width: 55px;
+    height: 3px;
+
+    background: #38bdf8;
+
+    box-shadow:
+        0 0 8px rgba(56, 189, 248, 0.7);
+
+    position: relative;
+    z-index: 2;
+}
+
+.circuit-wire::after {
+    content: "";
+
+    position: absolute;
+
+    width: 10px;
+    height: 10px;
+
+    top: -4px;
+    right: -2px;
+
+    border-radius: 50%;
+
+    background: #38bdf8;
+
+    box-shadow:
+        0 0 12px #38bdf8;
+
+    animation: electricityFlow 1s linear infinite;
+}
+
+
+/* GATE */
+
+.gate-box {
+    position: relative;
+    z-index: 2;
+
+    width: 115px;
+    height: 95px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(56, 189, 248, 0.12),
+            rgba(2, 6, 23, 0.95)
+        );
+
+    border: 1px solid rgba(56, 189, 248, 0.6);
+
+    box-shadow:
+        0 0 20px rgba(56, 189, 248, 0.12);
+}
+
+.gate-box span {
+    font-family: monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: #64748b;
+}
+
+.gate-box strong {
+    margin-top: 8px;
+
+    font-family: monospace;
+    font-size: 32px;
+
+    color: #facc15;
+
+    text-shadow:
+        0 0 15px rgba(250, 204, 21, 0.7);
+
+    animation: gateQuestion 1.2s ease-in-out infinite;
+}
+
+
+/* QUESTION */
+
+.gate-question {
+    margin-top: 16px;
+
+    padding: 24px;
+
+    text-align: center;
+
+    background: rgba(5, 15, 35, 0.85);
+
+    border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.gate-question h3 {
+    margin: 8px 0 20px;
+
+    font-size: 16px;
+    font-weight: 400;
+
+    color: #e2e8f0;
+}
+
+.gate-options {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.gate-button {
+    width: 120px;
+    padding: 13px;
+
+    background: rgba(14, 165, 233, 0.06);
+
+    border: 1px solid rgba(56, 189, 248, 0.35);
+
+    color: #38bdf8;
+
+    font-family: monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.gate-button:hover {
+    transform: translateY(-3px);
+
+    background: rgba(14, 165, 233, 0.15);
+
+    border-color: #38bdf8;
+
+    box-shadow:
+        0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+.gate-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+
+/* MESSAGE */
+
+#circuitMessage {
+    min-height: 20px;
+
+    margin: 15px 0 0;
+
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+
+/* MISSION COMPLETE */
+
+.mission-complete {
+    min-height: 350px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34, 197, 94, 0.1),
+            rgba(2, 6, 23, 0.9) 60%
+        );
+
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.complete-icon {
+    font-size: 50px;
+
+    animation: completePulse 1.5s infinite;
+}
+
+.mission-complete h2 {
+    margin: 15px 0 8px;
+
+    color: #22c55e;
+
+    font-family: monospace;
+    letter-spacing: 3px;
+
+    text-shadow:
+        0 0 15px rgba(34, 197, 94, 0.5);
+}
+
+.mission-complete p {
+    color: #94a3b8;
+}
+
+.key-earned {
+    margin-top: 18px;
+
+    padding: 10px 18px;
+
+    color: #facc15;
+
+    border: 1px solid rgba(250, 204, 21, 0.3);
+
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+
+/* ANIMATIONS */
+
+@keyframes circuitWarning {
+
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+}
+
+
+@keyframes powerBlink {
+
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+}
+
+
+@keyframes electricityFlow {
+
+    0% {
+        opacity: 0.2;
+        transform: translateX(-15px);
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.2;
+        transform: translateX(15px);
+    }
+}
+
+
+@keyframes gateQuestion {
+
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.55;
+        transform: scale(1.08);
+    }
+}
+
+
+@keyframes completePulse {
+
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.12);
+        opacity: 0.75;
+    }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .circuit-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .circuit-situation {
+        align-items: flex-start;
+    }
+
+    .circuit-board {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .circuit-wire {
+        width: 35px;
+    }
+
+    .gate-options {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .gate-button {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+/* =========================================
+   MISSION CODE REWARD
+========================================= */
+
+.mission-code {
+    margin-top: 18px;
+    padding: 14px 24px;
+
+    border: 1px solid rgba(250, 204, 21, 0.45);
+    background: rgba(250, 204, 21, 0.06);
+
+    color: #facc15;
+
+    font-family: monospace;
+    font-size: 14px;
+    letter-spacing: 2px;
+
+    box-shadow:
+        0 0 20px rgba(250, 204, 21, 0.08);
+}
+
+.mission-code strong {
+    font-size: 24px;
+    color: #ffffff;
+
+    text-shadow:
+        0 0 12px rgba(250, 204, 21, 0.7);
+}
+
+.code-instruction {
+    max-width: 420px;
+    margin: 14px auto;
+
+    color: #94a3b8;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.continue-button {
+    margin-top: 12px;
+
+    padding: 13px 24px;
+
+    background: rgba(14, 165, 233, 0.1);
+
+    border: 1px solid #38bdf8;
+
+    color: #38bdf8;
+
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.continue-button:hover {
+    background: rgba(14, 165, 233, 0.2);
+
+    box-shadow:
+        0 0 20px rgba(56, 189, 248, 0.25);
+
+    transform: translateY(-2px);
+}
+/* =========================================
+   MISSION 03 — DATA TREASURE HUNT
+========================================= */
+
+.treasure-mission {
+    width: 100%;
+    max-width: 1050px;
+    margin: 20px auto 0;
+}
+
+/* HEADER */
+
+.treasure-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 16px;
+
+    background: rgba(5, 15, 35, 0.85);
+
+    border: 1px solid rgba(56, 189, 248, 0.25);
+
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.treasure-round {
+    color: #38bdf8;
+}
+
+.treasure-status {
+    color: #facc15;
+
+    animation: storageWarning 1.2s infinite;
+}
+
+
+/* CLUE */
+
+.treasure-clue {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    margin-top: 16px;
+    padding: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(14, 165, 233, 0.08),
+            rgba(2, 6, 23, 0.9)
+        );
+
+    border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.treasure-icon {
+    width: 60px;
+    height: 60px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+
+    background: rgba(14, 165, 233, 0.08);
+
+    border: 1px solid rgba(56, 189, 248, 0.35);
+
+    box-shadow:
+        0 0 20px rgba(56, 189, 248, 0.1);
+}
+
+.treasure-clue p {
+    margin: 0;
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.treasure-clue p strong {
+    color: #facc15;
+
+    font-family: monospace;
+
+    text-shadow:
+        0 0 10px rgba(250, 204, 21, 0.5);
+}
+
+
+/* DATA GRID */
+
+.data-grid {
+    width: min(100%, 560px);
+
+    margin: 25px auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(14, 165, 233, 0.07),
+            rgba(2, 6, 23, 0.95)
+        );
+
+    border: 1px solid rgba(56, 189, 248, 0.2);
+
+    box-shadow:
+        inset 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+
+/* DATA TILE */
+
+.data-tile {
+    position: relative;
+
+    height: 95px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 23, 42, 0.95),
+            rgba(2, 6, 23, 0.95)
+        );
+
+    border: 1px solid rgba(56, 189, 248, 0.25);
+
+    color: white;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s,
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+.data-tile:hover {
+    transform: translateY(-4px);
+
+    border-color: #38bdf8;
+
+    background:
+        rgba(14, 165, 233, 0.1);
+
+    box-shadow:
+        0 0 20px rgba(56, 189, 248, 0.15);
+}
+
+.tile-number {
+    font-family: monospace;
+
+    font-size: 20px;
+
+    letter-spacing: 3px;
+
+    color: #38bdf8;
+
+    text-shadow:
+        0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.tile-status {
+    margin-top: 8px;
+
+    font-family: monospace;
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+
+    color: #64748b;
+}
+
+
+/* CORRECT TILE */
+
+.data-tile.correct-tile {
+    border-color: #22c55e;
+
+    background:
+        rgba(34, 197, 94, 0.12);
+
+    box-shadow:
+        0 0 30px rgba(34, 197, 94, 0.25);
+
+    transform: scale(1.04);
+}
+
+.data-tile.correct-tile .tile-number {
+    color: #22c55e;
+
+    text-shadow:
+        0 0 15px rgba(34, 197, 94, 0.7);
+}
+
+.data-tile.correct-tile .tile-status {
+    color: #22c55e;
+}
+
+
+/* WRONG TILE */
+
+.data-tile.wrong-tile {
+    border-color: #f87171;
+
+    background:
+        rgba(239, 68, 68, 0.12);
+
+    animation:
+        tileError 0.35s linear 2;
+}
+
+.data-tile.wrong-tile .tile-number {
+    color: #f87171;
+}
+
+
+/* DATA GUIDE */
+
+.data-guide {
+    width: min(100%, 560px);
+
+    margin: 0 auto;
+
+    padding: 14px 18px;
+
+    background: rgba(5, 15, 35, 0.8);
+
+    border-left: 3px solid #38bdf8;
+
+    border-top: 1px solid rgba(56, 189, 248, 0.15);
+    border-right: 1px solid rgba(56, 189, 248, 0.15);
+    border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+}
+
+.data-guide span {
+    font-family: monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    color: #38bdf8;
+}
+
+.data-guide p {
+    margin: 7px 0 0;
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    color: #94a3b8;
+}
+
+.data-guide strong {
+    color: #facc15;
+}
+
+
+/* MESSAGE */
+
+#treasureMessage {
+    min-height: 20px;
+
+    margin: 15px 0 0;
+
+    text-align: center;
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+}
+
+
+/* ANIMATIONS */
+
+@keyframes storageWarning {
+
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+}
+
+@keyframes tileError {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    75% {
+        transform: translateX(-5px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .treasure-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 6px;
+    }
+
+    .treasure-clue {
+        align-items: flex-start;
+    }
+
+    .data-grid {
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .data-tile {
+        height: 80px;
+    }
+
+    .tile-number {
+        font-size: 15px;
+    }
+}
+/* =========================================
+   MISSION 04 — SECRET CODE BREAKER
+========================================= */
+
+.secret-mission {
+    width: 100%;
+    max-width: 1050px;
+    margin: 20px auto 0;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.secret-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 16px;
+
+    background: rgba(5, 15, 35, 0.9);
+
+    border: 1px solid rgba(168, 85, 247, 0.3);
+
+    font-family: monospace;
+    font-size: 10px;
+
+    letter-spacing: 2px;
+}
+
+.secret-round {
+    color: #a855f7;
+}
+
+.secret-status {
+    color: #f87171;
+
+    animation: secretWarning 1.2s infinite;
+}
+
+
+/* =========================================
+   TERMINAL
+========================================= */
+
+.terminal-panel {
+
+    margin-top: 16px;
+
+    border: 1px solid rgba(168, 85, 247, 0.35);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30, 10, 55, 0.8),
+            rgba(2, 6, 23, 0.95)
+        );
+
+    box-shadow:
+        0 0 30px rgba(168, 85, 247, 0.08),
+        inset 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+
+/* TERMINAL TOP */
+
+.terminal-top {
+
+    display: flex;
+    justify-content: space-between;
+
+    padding: 10px 15px;
+
+    border-bottom:
+        1px solid rgba(168, 85, 247, 0.2);
+
+    background:
+        rgba(168, 85, 247, 0.05);
+
+    color: #a855f7;
+
+    font-family: monospace;
+    font-size: 9px;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* TERMINAL SCREEN */
+
+.terminal-screen {
+
+    min-height: 125px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(168, 85, 247, 0.08),
+            rgba(2, 6, 23, 0.98)
+        );
+
+    overflow: hidden;
+}
+
+
+/* TERMINAL LABEL */
+
+.terminal-label {
+
+    margin-bottom: 18px;
+
+    font-family: monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+
+    color: #64748b;
+}
+
+
+/* BINARY */
+
+.binary-message {
+
+    max-width: 100%;
+
+    text-align: center;
+
+    font-family: monospace;
+
+    font-size: 20px;
+
+    line-height: 1.8;
+
+    letter-spacing: 3px;
+
+    color: #c084fc;
+
+    text-shadow:
+        0 0 8px rgba(168, 85, 247, 0.7),
+        0 0 20px rgba(168, 85, 247, 0.35);
+
+    animation: binaryGlow 1.8s infinite alternate;
+}
+
+
+/* CURSOR */
+
+.terminal-cursor {
+
+    margin-top: 5px;
+
+    font-family: monospace;
+
+    color: #a855f7;
+
+    animation: cursorBlink 0.8s infinite;
+}
+
+
+/* =========================================
+   DECODER INFORMATION
+========================================= */
+
+.decoder-panel {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    margin-top: 16px;
+
+    padding: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(168, 85, 247, 0.08),
+            rgba(2, 6, 23, 0.9)
+        );
+
+    border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+
+.decoder-icon {
+
+    width: 58px;
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 27px;
+
+    background:
+        rgba(168, 85, 247, 0.08);
+
+    border:
+        1px solid rgba(168, 85, 247, 0.35);
+
+    box-shadow:
+        0 0 20px rgba(168, 85, 247, 0.1);
+}
+
+
+.decoder-info p {
+
+    margin: 6px 0 0;
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   ALPHABET DECODER
+========================================= */
+
+.alphabet-decoder {
+
+    margin-top: 16px;
+
+    background:
+        rgba(5, 15, 35, 0.9);
+
+    border:
+        1px solid rgba(56, 189, 248, 0.25);
+}
+
+
+/* CLICKABLE TITLE */
+
+.alphabet-decoder summary {
+
+    padding: 13px 16px;
+
+    cursor: pointer;
+
+    list-style: none;
+
+    color: #38bdf8;
+
+    font-family: monospace;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    transition: 0.2s;
+}
+
+
+.alphabet-decoder summary:hover {
+
+    background:
+        rgba(56, 189, 248, 0.06);
+
+    color: #7dd3fc;
+}
+
+
+/* REMOVE DEFAULT ARROW */
+
+.alphabet-decoder summary::-webkit-details-marker {
+    display: none;
+}
+
+
+/* DECODER GRID */
+
+.alphabet-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 6px;
+
+    padding: 14px;
+
+    border-top:
+        1px solid rgba(56, 189, 248, 0.15);
+
+    max-height: 230px;
+
+    overflow-y: auto;
+}
+
+
+/* ALPHABET ITEM */
+
+.alphabet-item {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 8px;
+
+    padding: 8px 10px;
+
+    background:
+        rgba(14, 165, 233, 0.05);
+
+    border:
+        1px solid rgba(56, 189, 248, 0.12);
+
+    font-family: monospace;
+
+    transition: 0.2s;
+}
+
+
+.alphabet-item:hover {
+
+    border-color: #38bdf8;
+
+    background:
+        rgba(56, 189, 248, 0.08);
+}
+
+
+.alphabet-item strong {
+
+    color: #facc15;
+
+    font-size: 13px;
+}
+
+
+.alphabet-item span {
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   PASSWORD AREA
+========================================= */
+
+.password-area {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    margin-top: 22px;
+}
+
+
+.password-area label {
+
+    margin-bottom: 10px;
+
+    font-family: monospace;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    color: #94a3b8;
+}
+
+
+/* INPUT */
+
+#secretAnswer {
+
+    width: min(100%, 320px);
+
+    padding: 13px 16px;
+
+    box-sizing: border-box;
+
+    background:
+        rgba(2, 6, 23, 0.95);
+
+    border:
+        1px solid rgba(168, 85, 247, 0.45);
+
+    outline: none;
+
+    color: #ffffff;
+
+    font-family: monospace;
+
+    font-size: 16px;
+
+    text-align: center;
+
+    letter-spacing: 4px;
+
+    text-transform: uppercase;
+
+    transition: 0.25s;
+}
+
+
+#secretAnswer:focus {
+
+    border-color: #a855f7;
+
+    box-shadow:
+        0 0 20px rgba(168, 85, 247, 0.2);
+}
+
+
+#secretAnswer::placeholder {
+
+    color: #475569;
+
+    letter-spacing: 2px;
+}
+
+
+/* DECRYPT BUTTON */
+
+.decrypt-button {
+
+    margin-top: 12px;
+
+    padding: 13px 25px;
+
+    background:
+        rgba(168, 85, 247, 0.08);
+
+    border:
+        1px solid #a855f7;
+
+    color: #c084fc;
+
+    font-family: monospace;
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+
+.decrypt-button:hover {
+
+    background:
+        rgba(168, 85, 247, 0.18);
+
+    box-shadow:
+        0 0 22px rgba(168, 85, 247, 0.25);
+
+    transform: translateY(-2px);
+}
+
+
+.decrypt-button:disabled {
+
+    opacity: 0.4;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+#secretMessage {
+
+    min-height: 20px;
+
+    margin: 15px 0 0;
+
+    text-align: center;
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes secretWarning {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+
+}
+
+
+@keyframes binaryGlow {
+
+    from {
+        opacity: 0.65;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+@keyframes cursorBlink {
+
+    0%,
+    45% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .secret-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 6px;
+
+    }
+
+
+    .binary-message {
+
+        font-size: 13px;
+
+        letter-spacing: 1.5px;
+
+        word-break: break-word;
+
+    }
+
+
+    .decoder-panel {
+
+        align-items: flex-start;
+
+    }
+
+
+    .alphabet-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .alphabet-item {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 3px;
+
+    }
+
+}
+/* =========================================
+   MISSION 05 — NETWORK RESCUE
+========================================= */
+
+.network-mission {
+    width: 100%;
+    max-width: 950px;
+    margin: 20px auto 0;
+}
+
+
+/* =========================================
+   NETWORK HEADER
+========================================= */
+
+.network-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 16px;
+
+    background: rgba(5, 15, 35, 0.9);
+    border: 1px solid rgba(34, 211, 238, 0.25);
+
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.network-round {
+    color: #22d3ee;
+}
+
+.network-status {
+    color: #f87171;
+    animation: networkWarning 1s infinite;
+}
+
+
+/* =========================================
+   ALERT PANEL
+========================================= */
+
+.network-alert {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    margin-top: 16px;
+    padding: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(239, 68, 68, 0.08),
+            rgba(2, 6, 23, 0.95)
+        );
+
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.network-alert-icon {
+    width: 58px;
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 27px;
+
+    background: rgba(239, 68, 68, 0.08);
+
+    border: 1px solid rgba(239, 68, 68, 0.35);
+
+    box-shadow:
+        0 0 20px rgba(239, 68, 68, 0.12);
+}
+
+.network-alert p {
+    margin: 6px 0 0;
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   NETWORK STATS
+========================================= */
+
+.network-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+
+    margin-top: 16px;
+}
+
+.network-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 16px;
+
+    background: rgba(5, 15, 35, 0.85);
+
+    border: 1px solid rgba(34, 211, 238, 0.18);
+
+    font-family: monospace;
+}
+
+.network-stat span {
+    color: #64748b;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+}
+
+.network-stat strong {
+    color: #22d3ee;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   NETWORK GRID
+========================================= */
+
+.network-grid {
+    width: min(100%, 520px);
+
+    margin: 24px auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 7px;
+
+    padding: 14px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34, 211, 238, 0.08),
+            rgba(2, 6, 23, 0.98)
+        );
+
+    border:
+        1px solid rgba(34, 211, 238, 0.25);
+
+    box-shadow:
+        inset 0 0 35px rgba(0, 0, 0, 0.5);
+}
+
+
+/* =========================================
+   NETWORK CELL
+========================================= */
+
+.network-cell {
+    position: relative;
+
+    aspect-ratio: 1 / 1;
+
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 23, 42, 0.95),
+            rgba(2, 6, 23, 0.95)
+        );
+
+    border:
+        1px solid rgba(34, 211, 238, 0.15);
+
+    color: white;
+
+    font-size: 23px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s,
+        border-color 0.2s,
+        background 0.2s,
+        box-shadow 0.2s;
+}
+
+.network-cell:hover {
+    border-color: rgba(34, 211, 238, 0.5);
+
+    background:
+        rgba(34, 211, 238, 0.08);
+
+    box-shadow:
+        0 0 15px rgba(34, 211, 238, 0.12);
+}
+
+
+/* =========================================
+   AGENT CELL
+========================================= */
+
+.network-cell.agent-cell {
+    border-color: #22c55e;
+
+    background:
+        rgba(34, 197, 94, 0.12);
+
+    box-shadow:
+        0 0 25px rgba(34, 197, 94, 0.25);
+
+    animation: agentPulse 1.2s infinite;
+}
+
+
+/* =========================================
+   VIRUS NODE
+========================================= */
+
+.network-cell.virus-node {
+    color: #f87171;
+
+    border-color:
+        rgba(239, 68, 68, 0.3);
+
+    background:
+        rgba(239, 68, 68, 0.07);
+
+    animation:
+        virusPulse 1.4s infinite;
+}
+
+
+/* VIRUS HIT */
+
+.network-cell.virus-hit {
+    border-color: #ef4444;
+
+    background:
+        rgba(239, 68, 68, 0.25);
+
+    animation:
+        virusHit 0.4s linear 2;
+}
+
+
+/* =========================================
+   SERVER
+========================================= */
+
+.network-cell[data-index="24"] {
+    color: #facc15;
+
+    border-color:
+        rgba(250, 204, 21, 0.4);
+
+    background:
+        rgba(250, 204, 21, 0.06);
+
+    box-shadow:
+        0 0 20px rgba(250, 204, 21, 0.08);
+}
+
+
+/* =========================================
+   MOVEMENT CONTROLS
+========================================= */
+
+.network-controls {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 10px;
+}
+
+.horizontal-controls {
+    display: flex;
+
+    gap: 7px;
+}
+
+.move-button {
+    width: 46px;
+    height: 40px;
+
+    background:
+        rgba(34, 211, 238, 0.06);
+
+    border:
+        1px solid rgba(34, 211, 238, 0.4);
+
+    color: #22d3ee;
+
+    font-family: monospace;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.move-button:hover {
+    background:
+        rgba(34, 211, 238, 0.15);
+
+    box-shadow:
+        0 0 15px rgba(34, 211, 238, 0.2);
+
+    transform: translateY(-2px);
+}
+
+.move-button:active {
+    transform: scale(0.94);
+}
+
+
+/* =========================================
+   LEGEND
+========================================= */
+
+.network-legend {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 25px;
+
+    margin-top: 16px;
+
+    font-family: monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+    color: #94a3b8;
+}
+
+
+/* =========================================
+   NETWORK MESSAGE
+========================================= */
+
+#networkMessage {
+    min-height: 20px;
+
+    margin: 14px 0 0;
+
+    text-align: center;
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   NETWORK COMPLETE
+========================================= */
+
+.network-complete {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 350px;
+
+    text-align: center;
+}
+
+.server-icon {
+    font-size: 55px;
+
+    margin-bottom: 15px;
+
+    animation: serverPulse 1.2s infinite;
+}
+
+.network-complete h2 {
+    margin: 8px 0;
+
+    color: #22d3ee;
+
+    font-family: monospace;
+
+    font-size: 22px;
+
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 0 15px rgba(34, 211, 238, 0.4);
+}
+
+.network-complete p {
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   FINAL TERMINAL
+========================================= */
+
+.final-terminal {
+    width: 100%;
+
+    max-width: 650px;
+
+    margin: 35px auto 0;
+
+    border:
+        1px solid rgba(250, 204, 21, 0.35);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25, 20, 5, 0.8),
+            rgba(2, 6, 23, 0.98)
+        );
+
+    box-shadow:
+        0 0 35px rgba(250, 204, 21, 0.08);
+}
+
+.final-terminal-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 12px 16px;
+
+    border-bottom:
+        1px solid rgba(250, 204, 21, 0.2);
+
+    background:
+        rgba(250, 204, 21, 0.05);
+
+    color: #facc15;
+
+    font-family: monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 1.5px;
+}
+
+.final-terminal-body {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding: 35px 20px;
+}
+
+.final-icon {
+    font-size: 45px;
+
+    margin-bottom: 12px;
+
+    animation: keyPulse 1.5s infinite;
+}
+
+.final-terminal-body h2 {
+    margin: 5px 0 8px;
+
+    color: #facc15;
+
+    font-family: monospace;
+
+    font-size: 18px;
+
+    letter-spacing: 2px;
+}
+
+.final-terminal-body > p {
+    margin: 0 0 22px;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   CODE KEY HINTS
+========================================= */
+
+.code-hint {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+}
+
+.code-hint span {
+    width: 42px;
+    height: 35px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid rgba(250, 204, 21, 0.2);
+
+    background:
+        rgba(250, 204, 21, 0.04);
+
+    color: #64748b;
+
+    font-family: monospace;
+
+    font-size: 7px;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================
+   FINAL CODE INPUT
+========================================= */
+
+#finalCode {
+    width: min(100%, 250px);
+
+    box-sizing: border-box;
+
+    padding: 14px;
+
+    background:
+        rgba(2, 6, 23, 0.95);
+
+    border:
+        1px solid rgba(250, 204, 21, 0.45);
+
+    outline: none;
+
+    color: #facc15;
+
+    font-family: monospace;
+
+    font-size: 22px;
+
+    text-align: center;
+
+    letter-spacing: 9px;
+
+    transition: 0.25s;
+}
+
+#finalCode:focus {
+    border-color: #facc15;
+
+    box-shadow:
+        0 0 25px rgba(250, 204, 21, 0.2);
+}
+
+#finalCode::placeholder {
+    color: #475569;
+
+    letter-spacing: 7px;
+}
+
+
+/* =========================================
+   RESTORE BUTTON
+========================================= */
+
+.restore-button {
+    margin-top: 15px;
+
+    padding: 14px 25px;
+
+    background:
+        rgba(250, 204, 21, 0.08);
+
+    border:
+        1px solid #facc15;
+
+    color: #facc15;
+
+    font-family: monospace;
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.restore-button:hover {
+    background:
+        rgba(250, 204, 21, 0.17);
+
+    box-shadow:
+        0 0 25px rgba(250, 204, 21, 0.2);
+
+    transform: translateY(-2px);
+}
+
+.restore-button:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* =========================================
+   FINAL MESSAGE
+========================================= */
+
+#finalMessage {
+    min-height: 20px;
+
+    margin-top: 15px;
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   FINAL SUCCESS
+========================================= */
+
+.final-success {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 430px;
+
+    text-align: center;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border:
+        2px solid #22c55e;
+
+    border-radius: 50%;
+
+    color: #22c55e;
+
+    font-size: 45px;
+
+    box-shadow:
+        0 0 35px rgba(34, 197, 94, 0.25);
+
+    animation: successPulse 1.2s infinite;
+}
+
+.success-label {
+    margin-top: 22px;
+
+    color: #22c55e;
+
+    font-family: monospace;
+
+    font-size: 12px;
+
+    letter-spacing: 4px;
+}
+
+.final-success h2 {
+    margin: 12px 0;
+
+    color: #ffffff;
+
+    font-family: monospace;
+
+    font-size: 25px;
+
+    letter-spacing: 2px;
+}
+
+.success-line {
+    width: 180px;
+    height: 1px;
+
+    margin: 8px 0 15px;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 12px rgba(34, 197, 94, 0.6);
+}
+
+.final-success > p {
+    color: #94a3b8;
+
+    font-family: monospace;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================================
+   FINAL STATS
+========================================= */
+
+.final-stats {
+    display: flex;
+
+    gap: 30px;
+
+    margin-top: 25px;
+}
+
+.final-stats div {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+.final-stats strong {
+    color: #22c55e;
+
+    font-family: monospace;
+
+    font-size: 20px;
+}
+
+.final-stats span {
+    color: #64748b;
+
+    font-family: monospace;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+}
+
+.final-message {
+    margin-top: 28px;
+
+    padding: 14px 22px;
+
+    border:
+        1px solid rgba(34, 197, 94, 0.2);
+
+    background:
+        rgba(34, 197, 94, 0.04);
+
+    color: #86efac;
+
+    font-family: monospace;
+
+    font-size: 10px;
+
+    line-height: 1.7;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes networkWarning {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+}
+
+@keyframes agentPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 15px rgba(34, 197, 94, 0.15);
+    }
+
+    50% {
+        box-shadow:
+            0 0 30px rgba(34, 197, 94, 0.35);
+    }
+}
+
+@keyframes virusPulse {
+
+    0%,
+    100% {
+        opacity: 0.65;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes virusHit {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-6px);
+    }
+
+    50% {
+        transform: translateX(6px);
+    }
+
+    75% {
+        transform: translateX(-6px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes serverPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        text-shadow:
+            0 0 10px rgba(250, 204, 21, 0.3);
+    }
+
+    50% {
+        transform: scale(1.08);
+        text-shadow:
+            0 0 25px rgba(250, 204, 21, 0.7);
+    }
+}
+
+@keyframes keyPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+@keyframes successPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow:
+            0 0 25px rgba(34, 197, 94, 0.2);
+    }
+
+    50% {
+        transform: scale(1.08);
+        box-shadow:
+            0 0 45px rgba(34, 197, 94, 0.4);
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .network-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .network-alert {
+        align-items: flex-start;
+    }
+
+    .network-grid {
+        gap: 5px;
+        padding: 9px;
+    }
+
+    .network-cell {
+        font-size: 18px;
+    }
+
+    .network-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .network-legend {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .final-terminal-header {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .code-hint {
+        gap: 4px;
+    }
+
+    .code-hint span {
+        width: 36px;
+    }
+
+    .final-success h2 {
+        font-size: 18px;
+    }
+
+    .final-stats {
+        gap: 18px;
+    }
+
+}
